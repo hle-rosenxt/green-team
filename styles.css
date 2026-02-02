@@ -258,9 +258,10 @@ h1, h2, h3 {
 
 .team-constellation {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
     margin-top: 3rem;
+    justify-items: center;
 }
 
 .wizard-card {
@@ -268,46 +269,123 @@ h1, h2, h3 {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    padding: 1.5rem;
+    padding: 0;
     background: rgba(57, 255, 20, 0.05);
     border: 1px solid rgba(57, 255, 20, 0.3);
-    border-radius: 50%;
-    aspect-ratio: 1;
+    border-radius: 15px;
+    overflow: hidden;
     transition: all 0.3s ease;
+    animation: float-card 4s ease-in-out infinite;
+    position: relative;
+}
+
+.wizard-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(57, 255, 20, 0.1), transparent);
+    animation: shimmer 3s infinite;
+    pointer-events: none;
+}
+
+.wizard-card:nth-child(1)::before {
+    animation-delay: 0s;
+}
+
+.wizard-card:nth-child(2)::before {
+    animation-delay: 0.5s;
+}
+
+.wizard-card:nth-child(3)::before {
+    animation-delay: 1s;
+}
+
+.wizard-card:nth-child(4)::before {
+    animation-delay: 1.5s;
+}
+
+.wizard-card:nth-child(5)::before {
+    animation-delay: 2s;
+}
+
+.wizard-card:nth-child(6)::before {
+    animation-delay: 2.5s;
+}
+
+.wizard-card:nth-child(7)::before {
+    animation-delay: 1.2s;
+}
+
+.wizard-card:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.wizard-card:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.wizard-card:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.wizard-card:nth-child(4) {
+    animation-delay: 0.9s;
+}
+
+.wizard-card:nth-child(5) {
+    animation-delay: 1.2s;
+}
+
+.wizard-card:nth-child(6) {
+    animation-delay: 1.5s;
+}
+
+.wizard-card:nth-child(7) {
+    animation-delay: 1.8s;
+}
+
+@keyframes float-card {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
 .wizard-card:hover {
     background: rgba(57, 255, 20, 0.15);
     border-color: var(--neon-green);
-    box-shadow: 0 0 30px rgba(57, 255, 20, 0.5);
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.5), 0 0 60px rgba(57, 255, 20, 0.3);
+    transform: translateY(-15px) scale(1.02);
+    animation: float-card 4s ease-in-out infinite, glow-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(57, 255, 20, 0.5), 0 0 60px rgba(57, 255, 20, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.5); }
 }
 
 .wizard-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--neon-green), var(--purple));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 1.2rem;
-    color: var(--void-black);
+    width: 100%;
+    height: 350px;
+    display: block;
+    object-fit: cover;
+    transition: all 0.5s ease;
 }
 
-.wizard-name {
-    font-size: 0.9rem;
-    text-align: center;
-    color: var(--silver);
+.wizard-card:hover .wizard-avatar {
+    filter: brightness(1.2) contrast(1.1);
+    transform: scale(1.05);
 }
 
 .grand-wizard {
     border: 2px solid var(--neon-green);
     background: rgba(57, 255, 20, 0.1);
-}
-
-.wizard-hat {
-    margin-left: 0.5rem;
 }
 
 /* Alchemy Section */
