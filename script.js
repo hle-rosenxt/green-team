@@ -33,10 +33,12 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe all sections
 document.querySelectorAll('section').forEach(section => {
-    section.style.opacity = '0';
-    section.style.transform = 'translateY(50px)';
-    section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-    observer.observe(section);
+    if (section) {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(50px)';
+        section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(section);
+    }
 });
 
 // Make hero section visible immediately
@@ -45,6 +47,16 @@ if (heroSection) {
     heroSection.style.opacity = '1';
     heroSection.style.transform = 'translateY(0)';
 }
+
+// Ensure all sections become visible (fallback)
+setTimeout(() => {
+    document.querySelectorAll('section').forEach(section => {
+        if (section && section.style.opacity === '0') {
+            section.style.opacity = '1';
+            section.style.transform = 'translateY(0)';
+        }
+    });
+}, 100);
 
 // Card hover effects
 const cards = document.querySelectorAll('.pillar-card, .wizard-card, .upgrade-card, .vision-item');
@@ -202,3 +214,473 @@ createParticles();
 // Log page load
 console.log('%c🧙‍♂️ Green Team 2025 - A Year of Wizardry', 'color: #39ff14; font-size: 20px; font-weight: bold;');
 console.log('%cBuilding the Future, One Spell at a Time.', 'color: #c0c0c0; font-size: 14px;');
+// ========================================
+// SPELLBOOK SECTION ENHANCEMENTS
+// ========================================
+
+// Animated particles for spell cards
+function createSpellParticles() {
+    const spellParticles = document.querySelectorAll('.spell-particles');
+    
+    spellParticles.forEach(container => {
+        for (let i = 0; i < 15; i++) {
+            const particle = document.createElement('div');
+            const size = Math.random() * 3 + 1;
+            const duration = Math.random() * 3 + 2;
+            const delay = Math.random() * 2;
+            
+            particle.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                background: var(--neon-green);
+                border-radius: 50%;
+                top: ${Math.random() * 100}%;
+                left: ${Math.random() * 100}%;
+                opacity: 0;
+                animation: particle-float ${duration}s ease-in-out ${delay}s infinite;
+                box-shadow: 0 0 5px var(--neon-green);
+            `;
+            
+            container.appendChild(particle);
+        }
+    });
+    
+    // Add particle animation
+    const particleStyle = document.createElement('style');
+    particleStyle.textContent = `
+        @keyframes particle-float {
+            0%, 100% {
+                opacity: 0;
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(-30px) scale(1.2);
+            }
+        }
+    `;
+    document.head.appendChild(particleStyle);
+}
+
+// Counter animation for time badges
+function animateCounters() {
+    const timeNumbers = document.querySelectorAll('.time-number');
+    
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.dataset.animated) {
+                const target = entry.target;
+                const finalValue = parseInt(target.textContent);
+                let currentValue = 0;
+                const increment = finalValue / 50;
+                const duration = 1500;
+                const stepTime = duration / 50;
+                
+                const counter = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= finalValue) {
+                        target.textContent = finalValue;
+                        clearInterval(counter);
+                    } else {
+                        target.textContent = Math.floor(currentValue);
+                    }
+                }, stepTime);
+                
+                target.dataset.animated = 'true';
+            }
+        });
+    }, observerOptions);
+    
+    timeNumbers.forEach(number => observer.observe(number));
+}
+
+// Interactive spell cards
+function enhanceSpellCards() {
+    const spellCards = document.querySelectorAll('.spell-card');
+    
+    spellCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+        
+        // Add sparkle effect on click
+        card.addEventListener('click', function(e) {
+            const sparkle = document.createElement('div');
+            sparkle.style.cssText = `
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                background: var(--neon-green);
+                border-radius: 50%;
+                left: ${e.offsetX}px;
+                top: ${e.offsetY}px;
+                pointer-events: none;
+                animation: sparkle-burst 0.6s ease-out forwards;
+                box-shadow: 0 0 20px var(--neon-green);
+            `;
+            this.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 600);
+        });
+    });
+    
+    // Add sparkle animation
+    const sparkleStyle = document.createElement('style');
+    sparkleStyle.textContent = `
+        @keyframes sparkle-burst {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(sparkleStyle);
+}
+
+// Trait cards reveal animation
+function animateTraitCards() {
+    const traitCards = document.querySelectorAll('.trait-card');
+    
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: '0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting && !entry.target.dataset.revealed) {
+                setTimeout(() => {
+                    entry.target.style.animation = 'slide-in-right 0.6s ease-out forwards';
+                    entry.target.dataset.revealed = 'true';
+                }, index * 150);
+            }
+        });
+    }, observerOptions);
+    
+    traitCards.forEach(card => {
+        card.style.opacity = '0';
+        observer.observe(card);
+    });
+    
+    // Add slide animation
+    const slideStyle = document.createElement('style');
+    slideStyle.textContent = `
+        @keyframes slide-in-right {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    `;
+    document.head.appendChild(slideStyle);
+}
+
+// AI benefit cards stagger animation
+function animateAIBenefits() {
+    const benefitCards = document.querySelectorAll('.ai-benefit-card');
+    
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting && !entry.target.dataset.revealed) {
+                setTimeout(() => {
+                    entry.target.style.animation = 'fade-in-up 0.8s ease-out forwards';
+                    entry.target.dataset.revealed = 'true';
+                }, index * 200);
+            }
+        });
+    }, observerOptions);
+    
+    benefitCards.forEach(card => {
+        card.style.opacity = '0';
+        observer.observe(card);
+    });
+    
+    // Add fade-in-up animation
+    const fadeStyle = document.createElement('style');
+    fadeStyle.textContent = `
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    `;
+    document.head.appendChild(fadeStyle);
+}
+
+// Interactive wizard evolution
+function enhanceWizardEvolution() {
+    const wizardStages = document.querySelectorAll('.wizard-stage');
+    
+    wizardStages.forEach(stage => {
+        stage.addEventListener('mouseenter', function() {
+            const avatar = this.querySelector('.wizard-avatar-evo');
+            if (avatar) {
+                avatar.style.transform = 'scale(1.1) rotate(5deg)';
+            }
+        });
+        
+        stage.addEventListener('mouseleave', function() {
+            const avatar = this.querySelector('.wizard-avatar-evo');
+            if (avatar) {
+                avatar.style.transform = 'scale(1) rotate(0deg)';
+            }
+        });
+    });
+}
+
+// Workflow task highlight on hover
+function enhanceWorkflowTasks() {
+    const workflowTasks = document.querySelectorAll('.workflow-task');
+    
+    workflowTasks.forEach(task => {
+        task.addEventListener('mouseenter', function() {
+            if (this.classList.contains('highlight')) {
+                this.style.transform = 'translateX(10px)';
+                this.style.boxShadow = '0 0 15px rgba(57, 255, 20, 0.5)';
+            }
+        });
+        
+        task.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+            this.style.boxShadow = 'none';
+        });
+    });
+}
+
+// Velocity stage sequential reveal
+function animateVelocityStages() {
+    const velocityStages = document.querySelectorAll('.velocity-stage');
+    
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                velocityStages.forEach((stage, index) => {
+                    if (!stage.dataset.revealed) {
+                        setTimeout(() => {
+                            stage.style.animation = 'pop-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards';
+                            stage.dataset.revealed = 'true';
+                        }, index * 300);
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+    
+    if (velocityStages.length > 0) {
+        velocityStages.forEach(stage => stage.style.opacity = '0');
+        observer.observe(velocityStages[0]);
+    }
+    
+    // Add pop-in animation
+    const popStyle = document.createElement('style');
+    popStyle.textContent = `
+        @keyframes pop-in {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    `;
+    document.head.appendChild(popStyle);
+}
+
+// Excellence pillars wave effect
+function animateExcellencePillars() {
+    const pillars = document.querySelectorAll('.excellence-pillar');
+    
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                pillars.forEach((pillar, index) => {
+                    if (!pillar.dataset.revealed) {
+                        setTimeout(() => {
+                            pillar.style.animation = 'bounce-in 0.6s ease-out forwards';
+                            pillar.dataset.revealed = 'true';
+                        }, index * 200);
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+    
+    if (pillars.length > 0) {
+        pillars.forEach(pillar => pillar.style.opacity = '0');
+        observer.observe(pillars[0]);
+    }
+    
+    // Add bounce-in animation
+    const bounceStyle = document.createElement('style');
+    bounceStyle.textContent = `
+        @keyframes bounce-in {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    `;
+    document.head.appendChild(bounceStyle);
+}
+
+// Sticky header shrink effect for all sections (instant, no animation)
+function initStickyHeaderShrink() {
+    const sections = [
+        { header: '.section-header-sticky', section: '.coven-section' },
+        { header: '.alchemy-section .section-header-sticky', section: '.alchemy-section' },
+        { header: '.spellbook-header-sticky', section: '.spellbook-section' },
+        { header: '.trial-section .section-header-sticky', section: '.trial-section' },
+        { header: '.prophecy-section .section-header-sticky', section: '.prophecy-section' }
+    ];
+    
+    sections.forEach(config => {
+        const stickyHeader = document.querySelector(config.header);
+        const section = document.querySelector(config.section);
+        
+        if (!stickyHeader || !section) return;
+        
+        let ticking = false;
+        let isCurrentlyStuck = false;
+        
+        const checkSticky = () => {
+            const sectionTop = section.getBoundingClientRect().top;
+            
+            // Much larger hysteresis to prevent any toggling
+            if (!isCurrentlyStuck && sectionTop <= -100) {
+                // Only shrink when scrolled well past the threshold
+                stickyHeader.classList.add('shrunk');
+                isCurrentlyStuck = true;
+            } else if (isCurrentlyStuck && sectionTop > 100) {
+                // Only expand when scrolled well before the threshold
+                stickyHeader.classList.remove('shrunk');
+                isCurrentlyStuck = false;
+            }
+            
+            ticking = false;
+        };
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(checkSticky);
+                ticking = true;
+            }
+        }, { passive: true });
+        
+        // Check initial state
+        checkSticky();
+    });
+}
+
+// Initialize all spellbook enhancements
+function initSpellbookEffects() {
+    try {
+        createSpellParticles();
+        animateCounters();
+        enhanceSpellCards();
+        animateTraitCards();
+        animateAIBenefits();
+        enhanceWizardEvolution();
+        enhanceWorkflowTasks();
+        animateVelocityStages();
+        animateExcellencePillars();
+        initAlchemyAnimations();
+        console.log('%c✨ Spellbook effects initialized', 'color: #39ff14');
+    } catch (error) {
+        console.error('Error initializing spellbook effects:', error);
+    }
+}
+
+// ========================================
+// ALCHEMY SECTION ANIMATIONS
+// ========================================
+
+function initAlchemyAnimations() {
+    const transmutationCards = document.querySelectorAll('.transmutation-card');
+    
+    if (transmutationCards.length === 0) return;
+    
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting && !entry.target.dataset.revealed) {
+                setTimeout(() => {
+                    entry.target.style.animation = 'fade-in-up 0.8s ease-out forwards';
+                    entry.target.dataset.revealed = 'true';
+                }, index * 150);
+            }
+        });
+    }, observerOptions);
+    
+    transmutationCards.forEach(card => {
+        card.style.opacity = '0';
+        observer.observe(card);
+        
+        // Add hover effect
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+}
+
+// Run when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSpellbookEffects);
+} else {
+    initSpellbookEffects();
+}
