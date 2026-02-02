@@ -277,6 +277,8 @@ h1, h2, h3 {
     transition: all 0.3s ease;
     animation: float-card 4s ease-in-out infinite;
     position: relative;
+    width: 100%;
+    max-width: 300px;
 }
 
 .wizard-card::before {
@@ -372,6 +374,7 @@ h1, h2, h3 {
 
 .wizard-avatar {
     width: 100%;
+    max-width: 300px;
     height: 350px;
     display: block;
     object-fit: cover;
