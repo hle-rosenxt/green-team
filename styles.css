@@ -907,31 +907,155 @@ h1, h2, h3 {
     background: linear-gradient(180deg, var(--obsidian) 0%, var(--void-black) 100%);
 }
 
-.outlook-image-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 3rem auto;
-    padding: 0 20px;
+.green-text {
+    color: var(--neon-green);
 }
 
-.outlook-image {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 0 40px rgba(57, 255, 20, 0.3);
-    transition: transform 0.5s ease, box-shadow 0.5s ease;
-    cursor: pointer;
+.prophecy-main-card {
+    position: relative;
+    max-width: 900px;
+    margin: 3rem auto 4rem;
+    padding: 3rem 2.5rem;
+    background: rgba(10, 10, 10, 0.8);
+    border: 2px solid rgba(192, 192, 192, 0.5);
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
-.outlook-image:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 80px rgba(57, 255, 20, 0.6), 0 0 120px rgba(57, 255, 20, 0.4);
+.prophecy-main-card:hover {
+    border-color: rgba(57, 255, 20, 0.6);
+    box-shadow: 0 0 40px rgba(57, 255, 20, 0.2);
+}
+
+.prophecy-statement {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: var(--silver);
+    font-family: 'Cinzel', serif;
+}
+
+.three-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.column-card {
+    position: relative;
+    padding: 2.5rem 2rem;
+    background: rgba(10, 10, 10, 0.9);
+    border: 2px solid;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.keep-card {
+    border-color: rgba(100, 149, 237, 0.6);
+}
+
+.keep-card:hover {
+    border-color: rgba(100, 149, 237, 1);
+    box-shadow: 0 0 30px rgba(100, 149, 237, 0.4);
+    transform: translateY(-5px);
+}
+
+.improve-card {
+    border-color: rgba(64, 224, 208, 0.6);
+}
+
+.improve-card:hover {
+    border-color: rgba(64, 224, 208, 1);
+    box-shadow: 0 0 30px rgba(64, 224, 208, 0.4);
+    transform: translateY(-5px);
+}
+
+.stop-card {
+    border-color: rgba(57, 255, 20, 0.6);
+}
+
+.stop-card:hover {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.4);
+    transform: translateY(-5px);
+}
+
+.column-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.column-title {
+    color: var(--neon-green);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Cinzel', serif;
+}
+
+.column-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.column-list li {
+    padding: 0.5rem 0;
+    color: var(--silver);
+    font-size: 1rem;
+}
+
+.column-list li::before {
+    content: "• ";
+    color: var(--neon-green);
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.card-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-style: solid;
+    border-color: rgba(57, 255, 20, 0.5);
+}
+
+.card-corner.top-left {
+    top: 10px;
+    left: 10px;
+    border-width: 2px 0 0 2px;
+}
+
+.card-corner.top-right {
+    top: 10px;
+    right: 10px;
+    border-width: 2px 2px 0 0;
+}
+
+.card-corner.bottom-left {
+    bottom: 10px;
+    left: 10px;
+    border-width: 0 0 2px 2px;
+}
+
+.card-corner.bottom-right {
+    bottom: 10px;
+    right: 10px;
+    border-width: 0 2px 2px 0;
 }
 
 @media (max-width: 768px) {
-    .outlook-image-container {
-        padding: 0 10px;
+    .three-columns {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .prophecy-main-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .prophecy-statement {
+        font-size: 1.1rem;
     }
 }
 
