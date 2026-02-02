@@ -596,69 +596,306 @@ h1, h2, h3 {
 
 /* Trial Section */
 .trial-section {
-    padding: 100px 0;
-    background: var(--void-black);
+    padding: 120px 0;
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, var(--void-black) 100%);
     position: relative;
     overflow: hidden;
+    contain: layout style paint;
 }
 
-.glitch-overlay {
+.magical-particles {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(57, 255, 20, 0.03) 0px,
-        transparent 2px,
-        transparent 4px,
-        rgba(57, 255, 20, 0.03) 6px
-    );
+    background-image: 
+        radial-gradient(3px 3px at 20% 30%, rgba(57, 255, 20, 0.6), transparent),
+        radial-gradient(3px 3px at 60% 70%, rgba(255, 215, 0, 0.5), transparent),
+        radial-gradient(3px 3px at 80% 10%, rgba(57, 255, 20, 0.5), transparent);
+    background-size: 200% 200%;
+    animation: float-particles 20s ease-in-out infinite;
     pointer-events: none;
-    animation: glitch-move 8s linear infinite;
+    will-change: transform;
 }
 
-@keyframes glitch-move {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+@keyframes float-particles {
+    0%, 100% { 
+        transform: translate3d(0, 0, 0);
+        opacity: 0.4;
+    }
+    50% { 
+        transform: translate3d(20px, -20px, 0);
+        opacity: 0.7;
+    }
 }
 
-.glitch-text {
-    animation: glitch 1s infinite;
+.wand-trail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, transparent 0%, var(--void-black) 100%);
+    pointer-events: none;
+    opacity: 0.5;
 }
 
-@keyframes glitch {
-    0% { text-shadow: 2px 2px var(--neon-green), -2px -2px var(--purple); }
-    25% { text-shadow: -2px 2px var(--neon-green), 2px -2px var(--purple); }
-    50% { text-shadow: 2px -2px var(--neon-green), -2px 2px var(--purple); }
-    75% { text-shadow: -2px -2px var(--neon-green), 2px 2px var(--purple); }
-    100% { text-shadow: 2px 2px var(--neon-green), -2px -2px var(--purple); }
+.lumos-glow {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(57, 255, 20, 0.25) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: lumos-pulse 8s ease-in-out infinite;
+    pointer-events: none;
+    filter: blur(50px);
+    will-change: transform, opacity;
 }
 
-.trial-content {
+@keyframes lumos-pulse {
+    0%, 100% { 
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 0.3;
+    }
+    50% { 
+        transform: translate3d(-50px, 50px, 0) scale(1.2);
+        opacity: 0.5;
+    }
+}
+
+.spell-text {
+    animation: spell-cast 4s ease-in-out infinite;
+    letter-spacing: 0.3rem;
+    will-change: transform;
+}
+
+@keyframes spell-cast {
+    0%, 100% { 
+        text-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
+        transform: scale3d(1, 1, 1);
+    }
+    50% { 
+        text-shadow: 0 0 20px var(--neon-green), 0 0 40px var(--neon-green);
+        transform: scale3d(1.02, 1.02, 1);
+    }
+}
+
+.incantation {
+    font-style: italic;
+    letter-spacing: 0.2rem;
+    animation: incantation-glow 3s ease-in-out infinite;
+    will-change: opacity;
+}
+
+@keyframes incantation-glow {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+.trial-battle {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin: 5rem 0;
+    position: relative;
 }
 
-.boss-monster, .challenge, .wisdom {
-    padding: 2rem;
-    background: rgba(107, 76, 154, 0.1);
-    border: 2px solid var(--purple);
-    border-radius: 10px;
-    transition: all 0.3s ease;
+.battle-card {
+    position: relative;
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    text-align: center;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform;
 }
 
-.boss-monster:hover, .challenge:hover, .wisdom:hover {
-    border-color: var(--neon-green);
-    box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+.dark-force {
+    background: linear-gradient(135deg, rgba(107, 76, 154, 0.3), rgba(0, 0, 0, 0.8));
+    border: 3px solid var(--purple);
+    box-shadow: 0 0 25px rgba(107, 76, 154, 0.5);
 }
 
-.boss-monster h3, .challenge h3, .wisdom h3 {
+.dark-force:hover {
+    transform: scale3d(1.05, 1.05, 1) rotate(-2deg);
+    box-shadow: 0 0 40px rgba(107, 76, 154, 0.7);
+}
+
+.patronus-force {
+    background: linear-gradient(135deg, rgba(57, 255, 20, 0.2), rgba(255, 215, 0, 0.2));
+    border: 3px solid var(--neon-green);
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.5);
+}
+
+.patronus-force:hover {
+    transform: scale3d(1.05, 1.05, 1) rotate(2deg);
+    box-shadow: 0 0 50px rgba(57, 255, 20, 0.8);
+}
+
+.spell-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    border: 2px dashed var(--purple);
+    border-radius: 50%;
+    animation: rotate-spell-circle 15s linear infinite;
+    opacity: 0.3;
+    will-change: transform;
+}
+
+@keyframes rotate-spell-circle {
+    from { transform: translate3d(-50%, -50%, 0) rotate(0deg); }
+    to { transform: translate3d(-50%, -50%, 0) rotate(360deg); }
+}
+
+.patronus-aura {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(57, 255, 20, 0.3), transparent);
+    border-radius: 50%;
+    animation: patronus-expand 3s ease-in-out infinite;
+    filter: blur(25px);
+    will-change: transform, opacity;
+}
+
+@keyframes patronus-expand {
+    0%, 100% { 
+        transform: translate3d(-50%, -50%, 0) scale(1);
+        opacity: 0.3;
+    }
+    50% { 
+        transform: translate3d(-50%, -50%, 0) scale(1.2);
+        opacity: 0.5;
+    }
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
+}
+
+.spell-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    animation: float-icon 4s ease-in-out infinite;
+    will-change: transform;
+}
+
+.spell-icon.glowing {
+    filter: drop-shadow(0 0 15px var(--neon-green));
+}
+
+@keyframes float-icon {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(-5deg); }
+    50% { transform: translate3d(0, -15px, 0) rotate(5deg); }
+}
+
+.battle-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: var(--neon-green);
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 10px var(--neon-green);
+}
+
+.challenge-desc, .triumph-desc {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--silver);
+    opacity: 0.9;
+}
+
+.versus-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.lightning-bolt {
+    font-size: 3rem;
+    color: var(--neon-green);
+    animation: lightning-strike 2s ease-in-out infinite;
+    will-change: opacity, transform;
+}
+
+@keyframes lightning-strike {
+    0%, 90%, 100% { 
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+    }
+    95% { 
+        opacity: 0.4;
+        transform: scale3d(1.2, 1.2, 1);
+    }
+}
+
+.vs-text {
+    font-family: 'Cinzel', serif;
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    color: var(--neon-green);
+    font-weight: 700;
+    letter-spacing: 0.3rem;
+    text-shadow: 0 0 15px var(--neon-green);
+}
+
+.wisdom-scroll {
+    margin-top: 5rem;
+    padding: 3rem;
+    background: linear-gradient(135deg, rgba(57, 255, 20, 0.05), rgba(255, 215, 0, 0.05));
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+}
+
+.scroll-decoration {
+    font-size: 2rem;
+    color: rgba(255, 215, 0, 0.8);
+    animation: twinkle 2s ease-in-out infinite;
+    will-change: opacity, transform;
+}
+
+@keyframes twinkle {
+    0%, 100% { 
+        opacity: 0.5; 
+        transform: scale3d(1, 1, 1); 
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale3d(1.15, 1.15, 1); 
+    }
+}
+
+.ancient-wisdom {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    color: rgba(255, 215, 0, 0.95);
+    margin: 1.5rem 0;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    line-height: 1.8;
+}
+
+.lesson-learned {
+    font-size: 1.1rem;
+    color: var(--neon-green);
+    margin: 1rem 0;
+    font-weight: 600;
 }
 
 /* Prophecy Section */
