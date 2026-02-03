@@ -1,3 +1,108 @@
+// --- Table of Contents Scroll-Spy & Toggle ---
+document.addEventListener('DOMContentLoaded', () => {
+    const toc = document.querySelector('.toc');
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocLinks = Array.from(document.querySelectorAll('.toc-item a'));
+    const sections = tocLinks
+        .map(link => link.getAttribute('data-section'))
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
+
+    // Toggle for mobile
+    if (toc && tocToggle) {
+        const setExpanded = (expanded) => {
+            toc.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            tocToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        };
+        setExpanded(false);
+        tocToggle.addEventListener('click', () => {
+            const isOpen = toc.getAttribute('aria-expanded') === 'true';
+            setExpanded(!isOpen);
+        });
+    }
+
+    // Smooth scroll on ToC clicks (ensure selection highlight updates promptly)
+    tocLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            // Allow default anchor behavior, but close mobile panel
+            if (toc) toc.setAttribute('aria-expanded', 'false');
+            // Briefly mark as active to give immediate feedback
+            setActiveLink(link);
+        });
+    });
+
+    // IntersectionObserver to highlight current section
+    const setActiveLink = (activeEl) => {
+        tocLinks.forEach(a => a.classList.remove('active'));
+        if (activeEl) activeEl.classList.add('active');
+    };
+
+    const linkById = (id) => tocLinks.find(a => a.getAttribute('data-section') === id);
+
+    const observer = new IntersectionObserver((entries) => {
+        // Pick the entry with the largest intersection ratio near viewport top
+        const visible = entries
+            .filter(e => e.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) {
+            const id = visible[0].target.id;
+            const link = linkById(id);
+            if (link) setActiveLink(link);
+        }
+    }, {
+        root: null,
+        threshold: [0.3, 0.6],
+        rootMargin: '-20% 0px -60% 0px' // favor top-half visibility
+    });
+
+    sections.forEach(sec => observer.observe(sec));
+
+    // Fallback: center-line based detection (active only past halfway point)
+    const updateActiveByScroll = () => {
+        const center = window.innerHeight / 2; // viewport midpoint
+        let activeSection = null;
+
+        // Prefer the section that spans the center line
+        for (const sec of sections) {
+            const rect = sec.getBoundingClientRect();
+            if (rect.top <= center && rect.bottom >= center) {
+                activeSection = sec;
+                break;
+            }
+        }
+
+        // If none spans the center, pick the nearest edge to center
+        if (!activeSection) {
+            let best = null;
+            let bestDist = Infinity;
+            sections.forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                const dist = Math.min(Math.abs(rect.top - center), Math.abs(rect.bottom - center));
+                if (dist < bestDist) { bestDist = dist; best = sec; }
+            });
+            activeSection = best;
+        }
+
+        if (activeSection) {
+            const link = linkById(activeSection.id);
+            if (link) setActiveLink(link);
+        }
+    };
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                updateActiveByScroll();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+    window.addEventListener('resize', updateActiveByScroll);
+    // Initial highlight on load
+    updateActiveByScroll();
+});
 // Custom Cursor - Magic Wand with Sparkles
 const cursor = document.querySelector('.custom-cursor');
 let lastX = 0;
@@ -613,53 +718,6 @@ function animateExcellencePillars() {
     document.head.appendChild(bounceStyle);
 }
 
-// Sticky header shrink effect for all sections (instant, no animation)
-function initStickyHeaderShrink() {
-    const sections = [
-        { header: '.section-header-sticky', section: '.coven-section' },
-        { header: '.alchemy-section .section-header-sticky', section: '.alchemy-section' },
-        { header: '.spellbook-header-sticky', section: '.spellbook-section' },
-        { header: '.trial-section .section-header-sticky', section: '.trial-section' },
-        { header: '.prophecy-section .section-header-sticky', section: '.prophecy-section' }
-    ];
-    
-    sections.forEach(config => {
-        const stickyHeader = document.querySelector(config.header);
-        const section = document.querySelector(config.section);
-        
-        if (!stickyHeader || !section) return;
-        
-        let ticking = false;
-        let isCurrentlyStuck = false;
-        
-        const checkSticky = () => {
-            const sectionTop = section.getBoundingClientRect().top;
-            
-            // Much larger hysteresis to prevent any toggling
-            if (!isCurrentlyStuck && sectionTop <= -100) {
-                // Only shrink when scrolled well past the threshold
-                stickyHeader.classList.add('shrunk');
-                isCurrentlyStuck = true;
-            } else if (isCurrentlyStuck && sectionTop > 100) {
-                // Only expand when scrolled well before the threshold
-                stickyHeader.classList.remove('shrunk');
-                isCurrentlyStuck = false;
-            }
-            
-            ticking = false;
-        };
-        
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(checkSticky);
-                ticking = true;
-            }
-        }, { passive: true });
-        
-        // Check initial state
-        checkSticky();
-    });
-}
 
 // Initialize all spellbook enhancements
 function initSpellbookEffects() {

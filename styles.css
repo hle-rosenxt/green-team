@@ -1,3 +1,96 @@
+/* --- Table of Contents (ToC) --- */
+html { scroll-behavior: smooth; }
+
+.toc {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 20px;
+    width: 240px;
+    max-height: 70vh;
+    overflow: hidden;
+    background: transparent;
+    backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 1000;
+}
+
+.toc-toggle {
+    display: none;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    background: transparent;
+    color: #d5f5e3;
+    border: none;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+
+.toc-item + .toc-item { margin-top: 6px; }
+
+.toc-item a {
+    display: block;
+    padding: 8px 0;
+    border-radius: 0;
+    color: rgba(183, 228, 212, 0.85);
+    text-decoration: none;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.toc-item a:hover { color: #eafff6; }
+
+.toc-item a.active {
+    color: #eafff6;
+    font-weight: 600;
+    border-left: 2px solid rgba(64, 160, 120, 0.6);
+    padding-left: 10px;
+}
+
+/* Ensure anchor jumps account for sticky headers */
+section { scroll-margin-top: 120px; }
+
+/* Mobile: make ToC collapsible and smaller */
+@media (max-width: 768px) {
+    .toc {
+        top: 10vh;
+        transform: none;
+        bottom: auto;
+        left: 20px;
+        width: 220px;
+        max-height: 60vh;
+    }
+    .toc-toggle {
+        display: block;
+        border-bottom: 1px solid rgba(64, 160, 120, 0.3);
+    }
+    .toc[aria-expanded="false"] .toc-list { display: none; }
+    .toc[aria-expanded="true"] .toc-list { display: block; }
+}
+
+/* Prevent overlap with potential sticky headers on very wide screens */
+@media (min-width: 1280px) {
+    .toc { top: 50%; transform: translateY(-50%); }
+}
+
+/* Reserve space for left ToC on wide screens */
+@media (min-width: 1024px) {
+    body.toc-left {
+        padding-left: 280px; /* ToC width + gutter */
+    }
+}
 /* Reset & Base Styles */
 * {
     margin: 0;
@@ -582,11 +675,11 @@ h1, h2, h3 {
     font-weight: 600;
     color: var(--void-black);
     margin: 0.3rem;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
 }
 
 .venture-badge.single {
-    font-size: 1rem;
+    font-size: 1.1rem;
     padding: 0.7rem 1.5rem;
 }
 
@@ -595,6 +688,24 @@ h1, h2, h3 {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
     margin-bottom: 0.5rem;
+    justify-items: center; /* center items within cells */
+    align-items: center;   /* center items vertically within cells */
+    justify-content: center; /* center the grid tracks horizontally */
+    align-content: center;    /* center the grid tracks vertically if space allows */
+    text-align: center;
+}
+
+/* Ensure uniform size for ventures in the After state */
+.flow-state.after-state .venture-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 80px; /* accommodate up to two lines comfortably */
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    text-align: center;
+    word-break: break-word;
 }
 
 /* Delivery Visual */
@@ -845,15 +956,15 @@ h1, h2, h3 {
 
 /* Generic Sticky Header for All Sections */
 .section-header-sticky {
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    background: linear-gradient(180deg, var(--void-black) 0%, rgba(10, 10, 10, 0.95) 100%);
-    backdrop-filter: blur(10px);
-    padding: 2rem 0 1rem 0;
-    box-shadow: 0 4px 30px rgba(57, 255, 20, 0.1);
-    border-bottom: 2px solid rgba(57, 255, 20, 0.2);
-    margin-bottom: 2rem;
+    position: static;
+    top: auto;
+    z-index: auto;
+    background: none;
+    backdrop-filter: none;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    margin: 0;
 }
 
 .section-header-sticky .section-title {
@@ -869,20 +980,20 @@ h1, h2, h3 {
 
 /* Spellbook Specific Sticky Header */
 .spellbook-header-sticky {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: linear-gradient(180deg, var(--void-black) 0%, rgba(10, 10, 10, 0.95) 100%);
-    backdrop-filter: blur(10px);
-    padding: 2rem 0 1rem 0;
-    box-shadow: 0 4px 30px rgba(57, 255, 20, 0.1);
-    border-bottom: 2px solid rgba(57, 255, 20, 0.2);
-    margin-bottom: 2rem;
+    position: static;
+    top: auto;
+    z-index: auto;
+    background: none;
+    backdrop-filter: none;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    margin: 0;
 }
 
 .spellbook-header-sticky .section-title {
     margin-bottom: 0.5rem;
-    font-size: 2.5rem;
+    font-size: 3rem;
 }
 
 .spellbook-header-sticky .section-subtitle {
@@ -904,6 +1015,18 @@ h1, h2, h3 {
     display: block;
     animation: pulse-counter 2s ease-in-out infinite;
 }
+
+/* Increase spacing under Coven subtitle */
+.coven-section .section-header-sticky .section-subtitle {
+    margin-bottom: 4rem;
+}
+
+/* Prophecy body title smaller than header title */
+.prophecy-section > .container > .section-title {
+    font-size: 2.2rem;
+}
+
+/* (removed) header-specific container override to use default .container styles */
 
 @keyframes pulse-counter {
     0%, 100% { opacity: 0.8; }

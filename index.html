@@ -9,9 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="toc-left">
     <!-- Custom Cursor -->
     <div class="custom-cursor"></div>
+
+    <!-- Table of Contents (Sticky) -->
+    <nav class="toc" aria-label="Page sections">
+        <button class="toc-toggle" aria-expanded="false" aria-controls="toc-list">☰ Sections</button>
+        <ul id="toc-list" class="toc-list">
+            <li class="toc-item"><a href="#hero" data-section="hero">Introduction</a></li>
+            <li class="toc-item"><a href="#coven" data-section="coven">The Coven</a></li>
+            <li class="toc-item"><a href="#alchemy" data-section="alchemy">Alchemy Transmutation</a></li>
+            <li class="toc-item"><a href="#spellbook" data-section="spellbook">Spellbook Upgrades</a></li>
+            <li class="toc-item"><a href="#trial" data-section="trial">Expecto Patronum</a></li>
+            <li class="toc-item"><a href="#prophecy" data-section="prophecy">The Prophecy</a></li>
+        </ul>
+    </nav>
 
     <!-- Hero Section: The Portal Opens -->
     <section id="hero" class="hero-section">
@@ -96,7 +109,7 @@
     <section id="alchemy" class="alchemy-section">
         <div class="section-header-sticky">
             <div class="container">
-                <h2 class="section-title">Achievement Unlocked</h2>
+                <h2 class="section-title">Alchemy Transmutation</h2>
                 <p class="section-subtitle">Turning Base Metals into Gold</p>
             </div>
         </div>
@@ -196,9 +209,9 @@
                             <div class="state-label">Before</div>
                             <div class="state-content">
                                 <div class="platform-type">
-                                    <span class="type-badge internal">Internal Usage Only</span>
+                                    <span class="type-badge internal">External Use only</span>
                                 </div>
-                                <p>Platform built only for internal use</p>
+                                <p>Platform built only for onboarding the external customer</p>
                             </div>
                         </div>
                         <div class="flow-arrow">⚡</div>
@@ -334,11 +347,6 @@
                     <div class="spell-icon">⚡</div>
                     <h3>The Automation Spell</h3>
                     <div class="spell-particles"></div>
-                </div>
-                
-                <div class="spell-description">
-                    <p>We standardized the project template and automated project provisioning: from <strong>2 days down to 30 minutes</strong>—enabling any developer to self-serve.</p>
-                    <p class="additional-magic">Additionally, we refined our QA release process to make it more visible and traceable, together with automatic announcement.</p>
                 </div>
 
                 <div class="speed-comparison">
@@ -552,10 +560,16 @@
         <div class="magical-particles"></div>
         <div class="wand-trail"></div>
         <div class="lumos-glow"></div>
+
+        <!-- Sticky header for Expecto Patronum -->
+        <div class="section-header-sticky">
+            <div class="container">
+                <h2 class="section-title spell-text">⚡ Expecto Patronum ⚡</h2>
+                <p class="section-subtitle incantation">Summoning Light from Our Darkest Challenges</p>
+            </div>
+        </div>
+
         <div class="container">
-            <h2 class="section-title spell-text">⚡ Expecto Patronum ⚡</h2>
-            <p class="section-subtitle incantation">Summoning Light from Our Darkest Challenges</p>
-            
             <div class="trial-battle">
                 <div class="battle-card dark-force">
                     <div class="spell-circle"></div>
