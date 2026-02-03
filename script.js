@@ -1,10 +1,52 @@
-// Custom Cursor
+// Custom Cursor - Magic Wand with Sparkles
 const cursor = document.querySelector('.custom-cursor');
+let lastX = 0;
+let lastY = 0;
+let sparkleTimer = 0;
 
 document.addEventListener('mousemove', (e) => {
     cursor.style.left = e.clientX + 'px';
     cursor.style.top = e.clientY + 'px';
+    
+    // Calculate movement distance
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Create sparkles when moving
+    if (distance > 5) {
+        sparkleTimer++;
+        if (sparkleTimer % 2 === 0) { // Create sparkle every other movement
+            createSparkle(e.clientX, e.clientY);
+        }
+    }
+    
+    lastX = e.clientX;
+    lastY = e.clientY;
 });
+
+function createSparkle(x, y) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    sparkle.style.left = (x - 8) + 'px';
+    sparkle.style.top = (y - 8) + 'px';
+    
+    // Random direction for sparkle movement
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 30 + Math.random() * 30;
+    const moveX = Math.cos(angle) * distance;
+    const moveY = Math.sin(angle) * distance;
+    
+    sparkle.style.setProperty('--x', moveX + 'px');
+    sparkle.style.setProperty('--y', moveY + 'px');
+    
+    document.body.appendChild(sparkle);
+    
+    // Remove sparkle after animation
+    setTimeout(() => {
+        sparkle.remove();
+    }, 800);
+}
 
 // Parallax Effect
 window.addEventListener('scroll', () => {

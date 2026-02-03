@@ -22,18 +22,47 @@ body {
     line-height: 1.6;
 }
 
-/* Custom Cursor */
+/* Custom Cursor - Magic Wand */
 .custom-cursor {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--neon-green);
+    width: 50px;
+    height: 50px;
     position: fixed;
     pointer-events: none;
     z-index: 10000;
-    mix-blend-mode: screen;
-    box-shadow: 0 0 20px var(--neon-green), 0 0 40px var(--neon-green);
-    transition: transform 0.1s ease;
+    transition: transform 0.15s ease;
+    background-image: url('assets/mouse-cursor.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 0 8px rgba(57, 255, 20, 0.6)) 
+            drop-shadow(0 0 15px rgba(57, 255, 20, 0.4))
+            drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* Sparkle effect */
+.sparkle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: sparkleFloat 1s ease-out forwards;
+}
+
+.sparkle::before {
+    content: '✨';
+    font-size: 20px;
+    display: block;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes sparkleFloat {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.5);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(1.5) rotate(180deg);
+    }
 }
 
 .container {
