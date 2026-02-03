@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Green Team Look Back - A Year of Wizardry</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪄</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
@@ -40,11 +41,13 @@
         <div class="hero-content">
             <h1 class="hero-title decrypt-text">Green Team Look Back - A Year of Evolution</h1>
             <p class="hero-subtitle">Building the Future, One Spell at a Time.</p>
+            <button class="start-story-btn" id="startStoryBtn">▶ Begin the Journey</button>
             <div class="scroll-indicator">
                 <span>Scroll down to "Enter the Realm"</span>
                 <div class="scroll-arrow">↓</div>
             </div>
         </div>
+        <audio id="audio-hero" src="assets/audios/01_IntroAndTheCoven.mp3" preload="auto"></audio>
     </section>
 
     <!-- Section I: The Coven -->
@@ -75,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="team-constellation">
+            <div class="team-constellation" id="team-constellation">
                 <div class="wizard-card">
                     <video src="assets/members/Bao.mp4" class="wizard-avatar" autoplay loop muted playsinline></video>
                 </div>
@@ -107,6 +110,7 @@
 
     <!-- Section II: Alchemy & Transmutation -->
     <section id="alchemy" class="alchemy-section">
+        <audio id="audio-alchemy" src="assets/audios/02_Alchemy_UnclockedAchivements.mp3" preload="auto"></audio>
         <div class="section-header-sticky">
             <div class="container">
                 <h2 class="section-title">Alchemy Transmutation</h2>
@@ -126,7 +130,7 @@
             <div class="transmutation-cards-wrapper">
                 
                 <!-- Transmutation 1: Venture Expansion -->
-                <div class="transmutation-card">
+                <div class="transmutation-card" id="venture-expansion">
                     <div class="transmutation-icon">🏢</div>
                     <h3 class="transmutation-title">Venture Expansion</h3>
                     <div class="transmutation-flow">
@@ -157,7 +161,7 @@
                 </div>
 
                 <!-- Transmutation 2: Value Delivery -->
-                <div class="transmutation-card">
+                <div class="transmutation-card" id="value-delivery">
                     <div class="transmutation-icon">💎</div>
                     <h3 class="transmutation-title">Value Delivery</h3>
                     <div class="transmutation-flow">
@@ -201,7 +205,7 @@
                 </div>
 
                 <!-- Transmutation 3: Multi-Tenant Evolution -->
-                <div class="transmutation-card">
+                <div class="transmutation-card" id="multi-tenant-evolution">
                     <div class="transmutation-icon">🔐</div>
                     <h3 class="transmutation-title">Multi-Tenant Evolution</h3>
                     <div class="transmutation-flow">
@@ -233,7 +237,7 @@
                 </div>
 
                 <!-- Transmutation 4: Environment Consolidation -->
-                <div class="transmutation-card">
+                <div class="transmutation-card" id="environment-consolidation">
                     <div class="transmutation-icon">🎯</div>
                     <h3 class="transmutation-title">Environment Consolidation</h3>
                     <div class="transmutation-flow">
@@ -273,7 +277,7 @@
                 </div>
 
                 <!-- Transmutation 5: DocMan Knowledge Loop -->
-                <div class="transmutation-card">
+                <div class="transmutation-card" id="knowledge-exchange">
                     <div class="transmutation-icon">📚</div>
                     <h3 class="transmutation-title">Knowledge Exchange</h3>
                     <div class="transmutation-flow">
@@ -322,6 +326,7 @@
 
     <!-- Section III: Spellbook Upgrades -->
     <section id="spellbook" class="spellbook-section">
+        <audio id="audio-spellbook" src="assets/audios/03_spellbook_upgrades.mp3" preload="auto"></audio>
         <div class="spellbook-header-sticky">
             <div class="container">
                 <h2 class="section-title">Spellbook Upgrades</h2>
@@ -342,12 +347,14 @@
             <div class="spell-cards-wrapper">
 
             <!-- Automation Magic -->
-            <div class="spell-card main-spell">
+            <div class="spell-card main-spell" id="automation-spell">
                 <div class="spell-header">
                     <div class="spell-icon">⚡</div>
                     <h3>The Automation Spell</h3>
                     <div class="spell-particles"></div>
                 </div>
+
+                <div class="spell-subtitle">We standardized the project template and automated project provisioning</div>
 
                 <div class="speed-comparison">
                     <div class="comparison-card old-magic">
@@ -401,7 +408,7 @@
             </div>
 
             <!-- Team Evolution -->
-            <div class="spell-card evolution-spell">
+            <div class="spell-card evolution-spell" id="evolution-enchantment">
                 <div class="spell-header">
                     <div class="spell-icon">🚀</div>
                     <h3>The Evolution Enchantment</h3>
@@ -455,7 +462,7 @@
             </div>
 
             <!-- AI Augmentation -->
-            <div class="spell-card ai-spell">
+            <div class="spell-card ai-spell" id="ai-amplification">
                 <div class="spell-header">
                     <div class="spell-icon">🤖</div>
                     <h3>The AI Amplification</h3>
@@ -489,7 +496,7 @@
                         </div>
                     </div>
 
-                    <div class="ai-benefit-card">
+                    <div class="ai-benefit-card" id="velocity-boost">
                         <div class="benefit-header">
                             <div class="benefit-icon">⚡</div>
                             <h4>Velocity Boost</h4>
@@ -557,6 +564,7 @@
 
     <!-- Section IV: Trial of Fire -->
     <section id="trial" class="trial-section">
+        <audio id="audio-trial" src="assets/audios/04_expecto_patronum.mp3" preload="auto"></audio>
         <div class="magical-particles"></div>
         <div class="wand-trail"></div>
         <div class="lumos-glow"></div>
@@ -608,6 +616,7 @@
 
     <!-- Section V: The Prophecy -->
     <section id="prophecy" class="prophecy-section">
+        <audio id="audio-prophecy" src="assets/audios/05_Prophecy.mp3" preload="auto"></audio>
         <div class="section-header-sticky">
             <div class="container">
                 <h2 class="section-title">The Prophecy</h2>

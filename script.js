@@ -784,3 +784,178 @@ if (document.readyState === 'loading') {
 } else {
     initSpellbookEffects();
 }
+
+// --- Storytelling Audio Sequence ---
+document.addEventListener('DOMContentLoaded', () => {
+    const sections = [
+        { 
+            id: 'hero', 
+            offset: 0,
+            subsections: [
+                { id: 'coven', time: 18, offset: -440 },
+                { id: 'team-constellation', time: 21, offset: -250 },
+            ]
+        },
+        { 
+            id: 'alchemy', 
+            offset: 0,
+            subsections: [
+                { id: 'venture-expansion', time: 12, offset: -120 },
+                { id: 'value-delivery', time: 28, offset: -120 },
+                // temporarily skipping because no audio for these
+                // { id: 'multi-tenant-evolution', time: 9, offset: -120 },
+                // { id: 'environment-consolidation', time: 12, offset: -120 },
+                { id: 'knowledge-exchange', time: 37, offset: -120 }
+            ]
+        },
+        { 
+            id: 'spellbook', 
+            offset: 0,
+            subsections: [
+                { id: 'automation-spell', time: 9, offset: 80 },
+                { id: 'evolution-enchantment', time: 19, offset: -120 },
+                { id: 'ai-amplification', time: 29, offset: -120 },
+                { id: 'velocity-boost', time: 37, offset: -120 }
+            ]
+        },
+        { 
+            id: 'trial', 
+            offset: 100,
+            subsections: []
+        },
+        { 
+            id: 'prophecy', 
+            offset: 50,
+            subsections: []
+        }
+    ];
+    let currentIndex = 0;
+    let isStoryPlaying = false;
+    let subsectionTimers = [];
+
+    const startBtn = document.getElementById('startStoryBtn');
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+
+    function clearSubsectionTimers() {
+        subsectionTimers.forEach(timer => clearTimeout(timer));
+        subsectionTimers = [];
+    }
+
+    function scrollToElement(elementId, offset = 0) {
+        const element = document.getElementById(elementId);
+        if (!element) {
+            console.warn(`Element not found: ${elementId}`);
+            return;
+        }
+        const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+        const scrollPosition = elementTop + offset;
+        window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+    }
+
+    function scheduleSubsectionScrolls(sectionConfig, audio) {
+        clearSubsectionTimers();
+        
+        if (!sectionConfig.subsections || sectionConfig.subsections.length === 0) {
+            return;
+        }
+
+        sectionConfig.subsections.forEach(subsection => {
+            const timer = setTimeout(() => {
+                console.log(`Scrolling to subsection: ${subsection.id} at ${subsection.time}s`);
+                scrollToElement(subsection.id, subsection.offset);
+            }, subsection.time * 1000);
+            
+            subsectionTimers.push(timer);
+        });
+    }
+
+    function playCurrentSection() {
+        if (currentIndex >= sections.length) {
+            // Story complete
+            clearSubsectionTimers();
+            isStoryPlaying = false;
+            if (startBtn) {
+                startBtn.innerHTML = '▶ Begin the Journey';
+                startBtn.disabled = false;
+            }
+            if (scrollIndicator) {
+                scrollIndicator.style.display = 'flex';
+            }
+            console.log('Story complete!');
+            return;
+        }
+
+        const sectionConfig = sections[currentIndex];
+        const sectionId = sectionConfig.id;
+        const section = document.getElementById(sectionId);
+        const audio = document.getElementById(`audio-${sectionId}`);
+
+        if (!section || !audio) {
+            console.warn(`Section or audio not found for: ${sectionId}`);
+            currentIndex++;
+            playCurrentSection();
+            return;
+        }
+
+        // Clear any existing subsection timers
+        clearSubsectionTimers();
+
+        // Scroll to section with offset
+        scrollToElement(sectionId, sectionConfig.offset);
+
+        // Play audio
+        audio.currentTime = 0;
+        const playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise
+                .then(() => {
+                    console.log(`Playing audio for section: ${sectionId}`);
+                    // Schedule subsection scrolls
+                    scheduleSubsectionScrolls(sectionConfig, audio);
+                })
+                .catch(error => {
+                    console.error(`Error playing audio for ${sectionId}:`, error);
+                    // Move to next section even if audio fails
+                    currentIndex++;
+                    playCurrentSection();
+                });
+        }
+
+        // When audio ends, move to next section
+        audio.onended = () => {
+            console.log(`Audio ended for section: ${sectionId}`);
+            clearSubsectionTimers();
+            currentIndex++;
+            // Small delay before moving to next section for smoother experience
+            setTimeout(() => {
+                playCurrentSection();
+            }, 500);
+        };
+    }
+
+    function startStory() {
+        if (isStoryPlaying) return;
+
+        isStoryPlaying = true;
+        currentIndex = 0;
+
+        // Update button
+        if (startBtn) {
+            startBtn.innerHTML = '⏸ Story Playing...';
+            startBtn.disabled = true;
+        }
+
+        // Hide scroll indicator
+        if (scrollIndicator) {
+            scrollIndicator.style.display = 'none';
+        }
+
+        playCurrentSection();
+    }
+
+    // Attach event listener to start button
+    if (startBtn) {
+        startBtn.addEventListener('click', startStory);
+    }
+});
