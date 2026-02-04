@@ -1219,6 +1219,14 @@ h1, h2, h3 {
     opacity: 0.8;
 }
 
+.spell-subtitle .highlight-text {
+    color: var(--neon-green);
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+    position: relative;
+    padding: 0 2px;
+}
+
 /* Speed Comparison */
 .speed-comparison {
     display: grid;

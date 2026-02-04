@@ -28,6 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (toc) toc.setAttribute('aria-expanded', 'false');
             // Briefly mark as active to give immediate feedback
             setActiveLink(link);
+            
+            // Only play audio if story is already playing
+            const sectionId = link.getAttribute('data-section');
+            if (sectionId && sectionId !== 'coven') {
+                // Check if story system exists and story is currently playing
+                if (window.storySystem && window.storySystem.playFromSection && window.storySystem.isPlaying && window.storySystem.isPlaying()) {
+                    // Use the story system to play this section (with subsections and continuation)
+                    window.storySystem.playFromSection(sectionId);
+                }
+            }
         });
     });
 
@@ -832,6 +842,43 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = 0;
     let isStoryPlaying = false;
     let subsectionTimers = [];
+    
+    // Make these functions accessible to ToC
+    window.storySystem = {
+        sections,
+        isPlaying: () => isStoryPlaying,
+        playFromSection: (sectionId) => {
+            // Find the index of the section
+            const index = sections.findIndex(s => s.id === sectionId);
+            if (index === -1) {
+                console.warn(`Section not found: ${sectionId}`);
+                return;
+            }
+            
+            // Stop all audio first
+            document.querySelectorAll('audio').forEach(a => {
+                a.pause();
+                a.currentTime = 0;
+            });
+            
+            // Set current index and start playing
+            currentIndex = index;
+            isStoryPlaying = true;
+            
+            // Update button state
+            if (startBtn) {
+                startBtn.innerHTML = '⏸ Story Playing...';
+                startBtn.disabled = true;
+            }
+            
+            // Hide scroll indicator
+            if (scrollIndicator) {
+                scrollIndicator.style.display = 'none';
+            }
+            
+            playCurrentSection();
+        }
+    };
 
     const startBtn = document.getElementById('startStoryBtn');
     const scrollIndicator = document.querySelector('.scroll-indicator');
