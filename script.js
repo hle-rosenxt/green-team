@@ -835,6 +835,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const startBtn = document.getElementById('startStoryBtn');
     const scrollIndicator = document.querySelector('.scroll-indicator');
+    const sortingHat = document.getElementById('sortingHat');
 
     function clearSubsectionTimers() {
         subsectionTimers.forEach(timer => clearTimeout(timer));
@@ -874,6 +875,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Story complete
             clearSubsectionTimers();
             isStoryPlaying = false;
+            
+            // Change sorting hat back to static
+            if (sortingHat) {
+                sortingHat.src = 'assets/sortinghat_static.png';
+            }
+            
             if (startBtn) {
                 startBtn.innerHTML = '▶ Begin the Journey';
                 startBtn.disabled = false;
@@ -907,6 +914,11 @@ document.addEventListener('DOMContentLoaded', () => {
         audio.currentTime = 0;
         const playPromise = audio.play();
 
+        // Change sorting hat to animated version
+        if (sortingHat) {
+            sortingHat.src = 'assets/sortinghat_moving.gif';
+        }
+
         if (playPromise !== undefined) {
             playPromise
                 .then(() => {
@@ -931,6 +943,13 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 playCurrentSection();
             }, 500);
+        };
+
+        // Change sorting hat back to static when audio is paused or stopped
+        audio.onpause = () => {
+            if (sortingHat && !isStoryPlaying) {
+                sortingHat.src = 'assets/sortinghat_static.png';
+            }
         };
     }
 
